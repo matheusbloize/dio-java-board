@@ -1,50 +1,62 @@
-Feb 21, 2025 11:35:11 AM liquibase.database
+Feb 21, 2025 11:47:03 AM liquibase.database
 INFO: Set default schema name to public
-Feb 21, 2025 11:35:11 AM liquibase.changelog
+Feb 21, 2025 11:47:03 AM liquibase.changelog
 INFO: Reading resource: db/changelog/migrations/db.changelog-202502211122.sql
-Feb 21, 2025 11:35:11 AM liquibase.changelog
-INFO: Creating database history table with name: public.databasechangelog
-Feb 21, 2025 11:35:11 AM liquibase.changelog
+Feb 21, 2025 11:47:03 AM liquibase.changelog
 INFO: Reading from public.databasechangelog
-Feb 21, 2025 11:35:11 AM liquibase.snapshot
-INFO: Creating snapshot
-Feb 21, 2025 11:35:11 AM liquibase.lockservice
+Feb 21, 2025 11:47:03 AM liquibase.changelog
+INFO: Reading resource: db/changelog/migrations/db.changelog-202502211140.sql
+Feb 21, 2025 11:47:03 AM liquibase.changelog
+INFO: Reading resource: db/changelog/migrations/db.changelog-202502211144.sql
+Feb 21, 2025 11:47:03 AM liquibase.changelog
+INFO: Reading resource: db/changelog/migrations/db.changelog-202502211145.sql
+Feb 21, 2025 11:47:03 AM liquibase.lockservice
 INFO: Successfully acquired change log lock
-Feb 21, 2025 11:35:11 AM liquibase.command
-INFO: Using deploymentId: 0148511198
-Feb 21, 2025 11:35:11 AM liquibase.changelog
+Feb 21, 2025 11:47:03 AM liquibase.command
+INFO: Using deploymentId: 0149223353
+Feb 21, 2025 11:47:03 AM liquibase.changelog
 INFO: Reading from public.databasechangelog
-Running Changeset: db/changelog/migrations/db.changelog-202502211122.sql::202502211122::matheus
-Feb 21, 2025 11:35:11 AM liquibase.changelog
+Running Changeset: db/changelog/migrations/db.changelog-202502211140.sql::202502211140::matheus
+Feb 21, 2025 11:47:03 AM liquibase.changelog
 INFO: Custom SQL executed
-Feb 21, 2025 11:35:11 AM liquibase.changelog
-INFO: ChangeSet db/changelog/migrations/db.changelog-202502211122.sql::202502211122::matheus ran successfully in 15ms
+Feb 21, 2025 11:47:03 AM liquibase.changelog
+INFO: ChangeSet db/changelog/migrations/db.changelog-202502211140.sql::202502211140::matheus ran successfully in 20ms
+Running Changeset: db/changelog/migrations/db.changelog-202502211144.sql::202502211144::matheus
+Feb 21, 2025 11:47:03 AM liquibase.changelog
+INFO: Custom SQL executed
+Feb 21, 2025 11:47:03 AM liquibase.changelog
+INFO: ChangeSet db/changelog/migrations/db.changelog-202502211144.sql::202502211144::matheus ran successfully in 7ms
+Running Changeset: db/changelog/migrations/db.changelog-202502211145.sql::202502211145::matheus
+Feb 21, 2025 11:47:03 AM liquibase.changelog
+INFO: Custom SQL executed
+Feb 21, 2025 11:47:03 AM liquibase.changelog
+INFO: ChangeSet db/changelog/migrations/db.changelog-202502211145.sql::202502211145::matheus ran successfully in 8ms
 
 UPDATE SUMMARY
-Run:                          1
-Previously run:               0
+Run:                          3
+Previously run:               1
 Filtered out:                 0
 -------------------------------
-Total change sets:            1
+Total change sets:            4
 
-Feb 21, 2025 11:35:11 AM liquibase.util
+Feb 21, 2025 11:47:04 AM liquibase.util
 INFO: UPDATE SUMMARY
-Feb 21, 2025 11:35:11 AM liquibase.util
-INFO: Run:                          1
-Feb 21, 2025 11:35:11 AM liquibase.util
-INFO: Previously run:               0
-Feb 21, 2025 11:35:11 AM liquibase.util
+Feb 21, 2025 11:47:04 AM liquibase.util
+INFO: Run:                          3
+Feb 21, 2025 11:47:04 AM liquibase.util
+INFO: Previously run:               1
+Feb 21, 2025 11:47:04 AM liquibase.util
 INFO: Filtered out:                 0
-Feb 21, 2025 11:35:11 AM liquibase.util
+Feb 21, 2025 11:47:04 AM liquibase.util
 INFO: -------------------------------
-Feb 21, 2025 11:35:11 AM liquibase.util
-INFO: Total change sets:            1
-Feb 21, 2025 11:35:11 AM liquibase.util
+Feb 21, 2025 11:47:04 AM liquibase.util
+INFO: Total change sets:            4
+Feb 21, 2025 11:47:04 AM liquibase.util
 INFO: Update summary generated
-Feb 21, 2025 11:35:11 AM liquibase.command
+Feb 21, 2025 11:47:04 AM liquibase.command
 INFO: Update command completed successfully.
-Liquibase: Update has been successful. Rows affected: 1
-Feb 21, 2025 11:35:11 AM liquibase.lockservice
+Liquibase: Update has been successful. Rows affected: 3
+Feb 21, 2025 11:47:04 AM liquibase.lockservice
 INFO: Successfully released change log lock
-Feb 21, 2025 11:35:11 AM liquibase.command
+Feb 21, 2025 11:47:04 AM liquibase.command
 INFO: Command execution complete
