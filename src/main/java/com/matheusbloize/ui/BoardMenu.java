@@ -2,9 +2,11 @@ package com.matheusbloize.ui;
 
 import com.matheusbloize.persistence.entity.BoardColumnEntity;
 import com.matheusbloize.persistence.entity.BoardEntity;
+import com.matheusbloize.persistence.entity.CardEntity;
 import com.matheusbloize.service.BoardColumnQueryService;
 import com.matheusbloize.service.BoardQueryService;
 import com.matheusbloize.service.CardQueryService;
+import com.matheusbloize.service.CardService;
 
 import lombok.AllArgsConstructor;
 
@@ -12,6 +14,7 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import static com.matheusbloize.persistence.config.ConnectionConfig.getConnection;
+import static com.matheusbloize.persistence.entity.BoardColumnKindEnum.INITIAL;
 
 @AllArgsConstructor
 public class BoardMenu {
@@ -22,7 +25,7 @@ public class BoardMenu {
 
     public void execute() {
         try {
-            System.out.printf("Bem vindo ao board %s, selecione a operação desejada", entity.getId());
+            System.out.printf("Bem vindo ao board %s, selecione a operação desejada\n", entity.getId());
             var option = -1;
             while (option != 9) {
                 System.out.println("1 - Criar um card");
@@ -57,7 +60,19 @@ public class BoardMenu {
 
     }
 
-    private void createCard() {
+    private void createCard() throws SQLException {
+        var card = new CardEntity();
+        System.out.println("Informe o título do card");
+        card.setTitle(scanner.next());
+        System.out.println("Informe a descrição do card");
+        card.setDescription(scanner.next());
+        var selectedColumn = entity.getBoardColumns().stream()
+                .filter(bc -> bc.getKind().equals(INITIAL))
+                .findFirst().orElseThrow();
+        card.setBoardColumn(selectedColumn);
+        try (var connection = getConnection()) {
+            new CardService(connection).create(card);
+        }
     }
 
     private void moveCardToNextColumn() {
@@ -79,20 +94,19 @@ public class BoardMenu {
                 System.out.printf("Board [%s,%s]\n", b.id(), b.name());
                 b.columns().forEach(c -> System.out.printf("Coluna [%s] tipo: [%s] tem %s cards\n", c.name(), c.kind(), c.cardsAmount()));
             });
-
         }
     }
 
     private void showColumn() throws SQLException {
         var columnsIds = entity.getBoardColumns().stream().map(BoardColumnEntity::getId).toList();
-        var selectedColumn = -1L;
-        while (!columnsIds.contains(selectedColumn)) {
-            System.out.printf("Escolha uma coluna do board %s\n", entity.getName());
+        var selectedColumnId = -1L;
+        while (!columnsIds.contains(selectedColumnId)) {
+            System.out.printf("Escolha uma coluna do board %s pelo id\n", entity.getName());
             entity.getBoardColumns().forEach(c -> System.out.printf("%s - %s [%s]\n", c.getId(), c.getName(), c.getKind()));
-            selectedColumn = scanner.nextLong();
+            selectedColumnId = scanner.nextLong();
         }
         try (var connection = getConnection()) {
-            var column = new BoardColumnQueryService(connection).findById(selectedColumn);
+            var column = new BoardColumnQueryService(connection).findById(selectedColumnId);
             column.ifPresent(co -> {
                 System.out.printf("Coluna %s tipo %s\n", co.getName(), co.getKind());
                 co.getCards().forEach(ca -> System.out.printf("Card %s - %s\nDescrição: %s",
@@ -111,7 +125,7 @@ public class BoardMenu {
                                 System.out.printf("Card %s - %s.\n", c.id(), c.title());
                                 System.out.printf("Descrição: %s\n", c.description());
                                 System.out.println(c.blocked() ? "Está bloqueado. Motivo: " + c.blockReason() : "Não está bloqueado");
-                                System.out.printf("Já foi bloqueado %s vezes", c.blocksAmount());
+                                System.out.printf("Já foi bloqueado %s vezes\n", c.blocksAmount());
                                 System.out.printf("Está no momento na coluna %s - %s\n", c.columnId(), c.columnName());
                             },
                             () -> System.out.printf("Não existe um card com o id %s\n", selectedCardId));
