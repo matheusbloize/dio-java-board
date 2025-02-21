@@ -1,7 +1,15 @@
 package com.matheusbloize;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import com.matheusbloize.persistence.migration.MigrationStrategy;
+import static com.matheusbloize.persistence.config.ConnectionConfig.getConnection;
+
 public class Main {
-    public static void main(String[] args) {
-        System.out.println("Hello world!");
+    public static void main(String[] args) throws SQLException {
+        try (Connection connection = getConnection()) {
+            new MigrationStrategy(connection).executeMigration();
+        }
     }
 }
