@@ -11,4 +11,5 @@ public enum BoardColumnKindEnum {
                 .filter(b -> b.name().equals(name))
                 .findFirst().orElseThrow();
     }
+
 }

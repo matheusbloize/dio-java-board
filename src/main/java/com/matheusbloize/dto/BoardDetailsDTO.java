@@ -2,5 +2,7 @@ package com.matheusbloize.dto;
 
 import java.util.List;
 
-public record BoardDetailsDTO(Long id, String name, List<BoardColumnDTO> columns) {
+public record BoardDetailsDTO(Long id,
+        String name,
+        List<BoardColumnDTO> columns) {
 }

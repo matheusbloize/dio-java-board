@@ -1,5 +1,6 @@
 package com.matheusbloize.ui;
 
+import com.matheusbloize.dto.BoardColumnInfoDTO;
 import com.matheusbloize.persistence.entity.BoardColumnEntity;
 import com.matheusbloize.persistence.entity.BoardEntity;
 import com.matheusbloize.persistence.entity.CardEntity;
@@ -14,12 +15,11 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import static com.matheusbloize.persistence.config.ConnectionConfig.getConnection;
-import static com.matheusbloize.persistence.entity.BoardColumnKindEnum.INITIAL;
 
 @AllArgsConstructor
 public class BoardMenu {
 
-    private final Scanner scanner = new Scanner(System.in).useDelimiter("\n");;
+    private final Scanner scanner = new Scanner(System.in);
 
     private final BoardEntity entity;
 
@@ -57,7 +57,6 @@ public class BoardMenu {
             ex.printStackTrace();
             System.exit(0);
         }
-
     }
 
     private void createCard() throws SQLException {
@@ -66,25 +65,64 @@ public class BoardMenu {
         card.setTitle(scanner.next());
         System.out.println("Informe a descrição do card");
         card.setDescription(scanner.next());
-        var selectedColumn = entity.getBoardColumns().stream()
-                .filter(bc -> bc.getKind().equals(INITIAL))
-                .findFirst().orElseThrow();
-        card.setBoardColumn(selectedColumn);
+        card.setBoardColumn(entity.getInitialColumn());
         try (var connection = getConnection()) {
             new CardService(connection).create(card);
         }
     }
 
-    private void moveCardToNextColumn() {
+    private void moveCardToNextColumn() throws SQLException {
+        System.out.println("Informe o id do card que deseja mover para a próxima coluna");
+        var cardId = scanner.nextLong();
+        var boardColumnsInfo = entity.getBoardColumns().stream()
+                .map(bc -> new BoardColumnInfoDTO(bc.getId(), bc.getOrder(), bc.getKind()))
+                .toList();
+        try (var connection = getConnection()) {
+            new CardService(connection).moveToNextColumn(cardId, boardColumnsInfo);
+        } catch (RuntimeException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
-    private void blockCard() {
+    private void blockCard() throws SQLException {
+        System.out.println("Informe o id do card que será bloqueado");
+        var cardId = scanner.nextLong();
+        System.out.println("Informe o motivo do bloqueio do card");
+        var reason = scanner.next();
+        var boardColumnsInfo = entity.getBoardColumns().stream()
+                .map(bc -> new BoardColumnInfoDTO(bc.getId(), bc.getOrder(), bc.getKind()))
+                .toList();
+        try (var connection = getConnection()) {
+            new CardService(connection).block(cardId, reason, boardColumnsInfo);
+        } catch (RuntimeException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
-    private void unblockCard() {
+    private void unblockCard() throws SQLException {
+        System.out.println("Informe o id do card que será desbloqueado");
+        var cardId = scanner.nextLong();
+        System.out.println("Informe o motivo do desbloqueio do card");
+        var reason = scanner.next();
+        try (var connection = getConnection()) {
+            new CardService(connection).unblock(cardId, reason);
+        } catch (RuntimeException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
-    private void cancelCard() {
+    private void cancelCard() throws SQLException {
+        System.out.println("Informe o id do card que deseja mover para a coluna de cancelamento");
+        var cardId = scanner.nextLong();
+        var cancelColumn = entity.getCancelColumn();
+        var boardColumnsInfo = entity.getBoardColumns().stream()
+                .map(bc -> new BoardColumnInfoDTO(bc.getId(), bc.getOrder(), bc.getKind()))
+                .toList();
+        try (var connection = getConnection()) {
+            new CardService(connection).cancel(cardId, cancelColumn.getId(), boardColumnsInfo);
+        } catch (RuntimeException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     private void showBoard() throws SQLException {

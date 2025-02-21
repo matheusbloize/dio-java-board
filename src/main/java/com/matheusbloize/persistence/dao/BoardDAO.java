@@ -4,7 +4,6 @@ import com.matheusbloize.persistence.entity.BoardEntity;
 import lombok.AllArgsConstructor;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
@@ -55,9 +54,8 @@ public class BoardDAO {
         var sql = "SELECT 1 FROM BOARDS WHERE id = ?;";
         try (var statement = connection.prepareStatement(sql)) {
             statement.setLong(1, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                return resultSet.next();
-            }
+            statement.executeQuery();
+            return statement.getResultSet().next();
         }
     }
 }
